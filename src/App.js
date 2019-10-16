@@ -1,48 +1,88 @@
-import React, {Component} from 'react';
-import './App.css';
-import axios from 'axios'
-import People from './People'
+import React, { Component } from "react";
+import "./App.css";
+import axios from "axios";
+import People from "./People";
 
 class App extends Component {
-  constructor () {
-    super()
+  constructor() {
+    super();
     this.state = {
-      people: []
-    }
+      people: [],
+      country: "",
+      genre: ""
+    };
   }
-  getAllPeople () {
-    axios.get(`/api/people`).then(res => (
-      this.setState({people: res.data})
-    )).catch(err => {
-      alert('could not find people')
-    })
+  countryChange(e) {
+    this.setState({
+      country: e
+    });
+  }
+  genreChange(e) {
+    this.setState({
+      genre: e.target.value
+    });
+  }
+  getAllPeople() {
+    axios
+      .get(`/api/people`)
+      .then(res => this.setState({ people: res.data }))
+      .catch(err => {
+        alert("could not find people");
+      });
   }
   getFemales() {
-    axios.get(`/api/people/females`).then(res => (
-      this.setState({people: res.data})
-    )).catch(err => {
-      alert('could not find only females')
-    })
+    axios
+      .get(`/api/people/females`)
+      .then(res => this.setState({ people: res.data }))
+      .catch(err => {
+        alert("could not find only females");
+      });
   }
   getMales() {
-    axios.get(`/api/people/males`).then(res => (
-      this.setState({people: res.data})
-    )).catch(err => {
-      alert('could not find only males')
-    })
+    axios
+      .get(`/api/people/males`)
+      .then(res => this.setState({ people: res.data }))
+      .catch(err => {
+        alert("could not find only males");
+      });
+  }
+  searchByCountry(count) {
+    axios
+      .get(`/api/people/country?count=${count}`)
+      .then(res => this.setState({ people: res.data }))
+      .catch(err => {
+        alert("cannot search by country");
+      });
   }
   render() {
-    console.log(this.state.people)
+    console.log(this.state.country);
     return (
-      <div className='outer-app'>
-      <button onClick={() => this.getAllPeople()}>Get All People</button>
-      <button onClick={() => this.getFemales()}>Females</button>
-      <button onClick={() => this.getMales()}>Males</button>
+      <div className="outer-app">
+        <div className="nav">
+          <button onClick={() => this.getAllPeople()}>Get All People</button>
+          <button onClick={() => this.getFemales()}>Females</button>
+          <button onClick={() => this.getMales()}>Males</button>
+          <div>
+            <input
+              value={this.state.country}
+              onChange={e => this.countryChange(e.target.value)}
+              type="text"
+              placeholder="...type a country"
+            />
+            <button onClick={e => this.searchByCountry(this.state.country)}>
+              Submit Country
+            </button>
+          </div>
+          <div>
+            <input type="text" placeholder="...type a movie genre" />
+            <button>Submit Genre</button>
+          </div>
+        </div>
         <div className="App">
-      {this.state.people.map(el => (
-      <People key={el.id} data={el}/>
-      ))}
-      </div>
+          {this.state.people.map(el => (
+            <People key={el.id} data={el} />
+          ))}
+        </div>
       </div>
     );
   }
