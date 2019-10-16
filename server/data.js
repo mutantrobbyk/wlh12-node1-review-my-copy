@@ -300,3 +300,5 @@ const people = [
     movie_genre: "Action|Adventure|Drama"
   }
 ];
+
+module.exports = people
