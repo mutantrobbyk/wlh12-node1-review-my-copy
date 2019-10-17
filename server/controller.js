@@ -20,12 +20,21 @@ module.exports = {
         res.status(200).send(males)
     },
     getPeopleByCountry(req, res, next) {
-        console.log(req.query)
+        // console.log(req.query)
         const {count} = req.query
         let countries = people.filter(el => {
            return el.country.toLowerCase().includes(count.toLowerCase())
         })
         res.status(200).send(countries)
-        console.log(countries)
+        // console.log(countries)
+    },
+    getPeopleByGenre(req, res, next) {
+        console.log(req.query)
+        const {gen} = req.query
+        let genres = people.filter(el => {
+           return el.movie_genre.toLowerCase().includes(gen.toLowerCase())
+        })
+        res.status(200).send(genres)
+        console.log(genres)
     }
 }

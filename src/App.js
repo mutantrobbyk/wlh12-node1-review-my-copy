@@ -19,7 +19,7 @@ class App extends Component {
   }
   genreChange(e) {
     this.setState({
-      genre: e.target.value
+      genre: e
     });
   }
   getAllPeople() {
@@ -54,6 +54,14 @@ class App extends Component {
         alert("cannot search by country");
       });
   }
+  searchByGenre(gen) {
+    axios
+      .get(`/api/people/genre?gen=${gen}`)
+      .then(res => this.setState({ people: res.data }))
+      .catch(err => {
+        alert("cannot search by genre");
+      });
+  }
   render() {
     console.log(this.state.country);
     return (
@@ -69,13 +77,30 @@ class App extends Component {
               type="text"
               placeholder="...type a country"
             />
-            <button onClick={e => this.searchByCountry(this.state.country)}>
+            <button
+              onClick={e => {
+                this.searchByCountry(this.state.country);
+                this.setState({ country: "" });
+              }}
+            >
               Submit Country
             </button>
           </div>
           <div>
-            <input type="text" placeholder="...type a movie genre" />
-            <button>Submit Genre</button>
+            <input
+              value={this.state.genre}
+              onChange={e => this.genreChange(e.target.value)}
+              type="text"
+              placeholder="...type a movie genre"
+            />
+            <button
+              onClick={e => {
+                this.searchByGenre(this.state.genre);
+                this.setState({ genre: "" });
+              }}
+            >
+              Submit Genre
+            </button>
           </div>
         </div>
         <div className="App">
